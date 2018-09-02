@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
+import org.debins.ddpkg 1.0
 
 ApplicationWindow {
     visible: true
@@ -8,5 +9,10 @@ ApplicationWindow {
     height: 425
     title: qsTr("DebIns")
 
-    MainForm{}
+    MainForm{
+        id: mainForm
+    }
+    DDpkg{
+        id: ddpkg
+    }
 }

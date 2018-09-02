@@ -31,7 +31,7 @@ Item {
                 x: 55
                 y: 183
                 color: "#2d2d2d"
-                text: "148 MB"
+                text: ddpkg.fileSize + " MB"
                 style: Text.Raised
                 verticalAlignment: Text.AlignVCenter
                 font.bold: false
@@ -47,7 +47,7 @@ Item {
                 x: 12
                 y: 159
                 color: "#2d2d2d"
-                text: "filename_1.0.0.deb"
+                text: ddpkg.fileName
                 anchors.horizontalCenterOffset: 0
                 styleColor: "#ffffff"
                 style: Text.Raised
@@ -148,5 +148,10 @@ Item {
                 color: "#bbbbbb"
             }
         }
+    }
+
+    Connections {
+        target: install_ma
+        onClicked: ddpkg.install()
     }
 }

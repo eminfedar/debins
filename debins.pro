@@ -2,8 +2,7 @@ QT += qml quick
 
 CONFIG += c++11
 
-SOURCES += main.cpp \
-    ddpkg.cpp
+SOURCES += main.cpp
 
 RESOURCES += qml.qrc
 

@@ -7,5 +7,6 @@
         <file>img/debicon.png</file>
         <file>img/install.png</file>
         <file>img/refresh.png</file>
+        <file>img/icon.png</file>
     </qresource>
 </RCC>

@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QtMath>
+#include <QIcon>
 #include "ddpkg.h"
 
 QString DDpkg::debFileName = "";
@@ -17,6 +18,7 @@ int main(int argc, char *argv[])
 #endif
     QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/img/icon.png"));
 
     // Get .deb file path from argument
     QString filePath = QString::fromUtf8(argv[1]);

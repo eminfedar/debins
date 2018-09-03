@@ -27,14 +27,11 @@ private:
     }
 
     // If you use an another package system, just change the these two.
-    QString cmd_ins_beforeFileName = "pkexec /bin/sh -c \"dpkg --install '";
-    QString cmd_ins_afterFileName = "' && ";
-    QString cmd_rem_beforeFileName = "pkexec dpkg --purge ";
-    QString cmd_rem_afterFileName = "";
-    QString cmd_fixInstallDependencies = "apt-get install -f -y\"";
+    QString cmd_install = "pkexec /bin/sh -c \"dpkg --install '{DEBFILE}' && apt-get install -f -y\"";
+    QString cmd_remove = "pkexec dpkg --purge {PACKAGE}";
 
     // Get the name of the package in the repository.
-    QString cmd_getPackageName = "dpkg --info {DEBFILE}";
+    QString cmd_getPackageName = "dpkg --info \"{DEBFILE}\"";
 
     // Check if package exists command.
     QString cmd_checkIfPackageExists = "/bin/sh -c \"dpkg -l | grep 'ii  {PACKAGE}'\"";
@@ -71,7 +68,7 @@ public slots:
             process->deleteLater();
         });
 
-        QString command = (cmd_ins_beforeFileName + DDpkg::debFilePath + cmd_ins_afterFileName + cmd_fixInstallDependencies);
+        QString command = cmd_install.replace(QString("{DEBFILE}"), DDpkg::debFilePath);
         process->start(command);
     }
 
@@ -90,12 +87,14 @@ public slots:
             process->deleteLater();
         });
 
-        QString command = cmd_rem_beforeFileName + getPackageName() + cmd_rem_afterFileName;
+        QString command = cmd_remove.replace(QString("{PACKAGE}"), getPackageName());
+        qDebug() << "CMD for Uninstall: " << command;
         process->start(command);
     }
 
     QString getPackageName(){
         QProcess* process = new QProcess();
+        process->setProcessChannelMode(QProcess::MergedChannels);
         QString packageName = "";
 
         QString command = cmd_getPackageName.replace(QString("{DEBFILE}"), DDpkg::debFilePath);

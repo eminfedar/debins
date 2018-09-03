@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     // Send infos to QML
     DDpkg::debFileName = file.fileName();
-    DDpkg::debFilePath = filePath;
+    DDpkg::debFilePath = file.absoluteFilePath();
     DDpkg::debFileSizeMB = QString::number((double)(floor(file.size() / 1000.0 / 1000.0 * 10.0) / 10.0));
 
     qmlRegisterType<DDpkg>("org.debins.ddpkg", 1, 0, "DDpkg");

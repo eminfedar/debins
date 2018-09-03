@@ -27,10 +27,11 @@ private:
     }
 
     // If you use an another package system, just change the these two.
-    QString cmd_ins_beforeFileName = "pkexec dpkg --install ";
-    QString cmd_ins_afterFileName = "";
+    QString cmd_ins_beforeFileName = "pkexec /bin/sh -c \"dpkg --install ";
+    QString cmd_ins_afterFileName = " && ";
     QString cmd_rem_beforeFileName = "pkexec dpkg --purge ";
     QString cmd_rem_afterFileName = "";
+    QString cmd_fixInstallDependencies = "apt-get install -f -y\"";
 
     // Get the name of the package in the repository.
     QString cmd_getPackageName = "dpkg --info {DEBFILE}";
@@ -70,7 +71,7 @@ public slots:
             process->deleteLater();
         });
 
-        QString command = cmd_ins_beforeFileName + DDpkg::debFilePath + cmd_ins_afterFileName;
+        QString command = (cmd_ins_beforeFileName + DDpkg::debFilePath + cmd_ins_afterFileName + cmd_fixInstallDependencies);
         process->start(command);
     }
 
@@ -96,26 +97,21 @@ public slots:
     QString getPackageName(){
         QProcess* process = new QProcess();
         QString packageName = "";
-        process->connect(process, &QProcess::readyReadStandardError, [&]{
-            QString processStdErr = (process->readAllStandardError());
-            qDebug() << "ERR PKG NAME: " << processStdErr;
-        });
-        process->connect(process, &QProcess::readyReadStandardOutput, [&]{
-            QString processStdOut = (process->readAllStandardOutput());
-            QList<QString> lines = processStdOut.split("\n ");
-            foreach (QString value, lines) {
-                if(value.split(": ")[0] == "Package"){
-                    packageName = value.split(": ")[1];
-                    break;
-                }
-            }
-        });
 
         QString command = cmd_getPackageName.replace(QString("{DEBFILE}"), DDpkg::debFilePath);
         process->start(command);
         process->waitForFinished();
 
-        delete process;
+        QString processStdOut = (process->readAllStandardOutput());
+        QList<QString> lines = processStdOut.split("\n ");
+        foreach (QString value, lines) {
+            if(value.split(": ")[0] == "Package"){
+                packageName = value.split(": ")[1];
+                break;
+            }
+        }
+
+        process->deleteLater();
         return packageName;
     }
 

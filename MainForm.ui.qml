@@ -177,7 +177,6 @@ Item {
         target: ddpkg
 
         onPackexistsChanged: {
-            console.log("Changed")
             uninstall_rect.enabled = ddpkg.packexists
             if(ddpkg.packexists){
                 install.source = "img/refresh.png"

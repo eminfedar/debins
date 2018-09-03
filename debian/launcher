@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Debins
+Version=1.0
+Exec=debins
+Comment=Install .deb packages easily.
+Icon=debins
+Type=Application
+Terminal=false
+StartupNotify=true
+Encoding=UTF-8
+Categories=Utility;

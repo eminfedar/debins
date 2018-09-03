@@ -32,7 +32,7 @@ Item {
                 x: 55
                 y: 183
                 color: "#2d2d2d"
-                text: ddpkg.fileSize + " MB"
+                text: ddpkg.fileSize
                 style: Text.Raised
                 verticalAlignment: Text.AlignVCenter
                 font.bold: false

@@ -1,0 +1,9 @@
+Package: debins
+Version: 0.1
+Maintainer: Emin Fedar <eminfedar@gmail.com>
+Section: utils
+Architecture: amd64
+Priority: standard
+Depends: libqt5quick5, libqt5qml5, libqt5gui5, libqt5network5, libqt5core5a, libstdc++6, libgcc1, libc6, xdg-utils
+Description: Simple One-Click deb package installer.
+ Install .deb packages just by opening them with double-click!

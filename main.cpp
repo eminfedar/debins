@@ -34,14 +34,20 @@ int main(int argc, char *argv[])
     // Send infos to QML
     DDpkg::debFileName = file.fileName();
     DDpkg::debFilePath = file.absoluteFilePath();
-    DDpkg::debFileSizeMB = QString::number((double)(floor(file.size() / 1000.0 / 1000.0 * 10.0) / 10.0));
+    QString fileSize = "";
+    if(file.size() / 1000.0 / 1000.0 < 1)
+        fileSize = QString::number((double)(floor(file.size() / 1000.0 * 10.0) / 10.0)) + " KB";
+    else if(file.size() / 1000.0 / 1000.0 / 1000.0 < 1)
+        fileSize = QString::number((double)(floor(file.size() / 1000.0 / 1000.0 * 10.0) / 10.0)) + " MB";
+    else
+        fileSize = QString::number((double)(floor(file.size() / 1000.0 / 1000.0 / 1000.0 * 10.0) / 10.0)) + "GB";
+    DDpkg::debFileSizeMB = fileSize;
 
+    // Register DDpkg class for QML accessing.
     qmlRegisterType<DDpkg>("org.debins.ddpkg", 1, 0, "DDpkg");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
-
-
 
     return app.exec();
 }

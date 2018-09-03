@@ -27,8 +27,8 @@ private:
     }
 
     // If you use an another package system, just change the these two.
-    QString cmd_ins_beforeFileName = "pkexec /bin/sh -c \"dpkg --install ";
-    QString cmd_ins_afterFileName = " && ";
+    QString cmd_ins_beforeFileName = "pkexec /bin/sh -c \"dpkg --install '";
+    QString cmd_ins_afterFileName = "' && ";
     QString cmd_rem_beforeFileName = "pkexec dpkg --purge ";
     QString cmd_rem_afterFileName = "";
     QString cmd_fixInstallDependencies = "apt-get install -f -y\"";

@@ -160,7 +160,6 @@ Item {
             popup.text = qsTr("Installing...")
             popup.open()
             ddpkg.install()
-            popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
         }
     }
 

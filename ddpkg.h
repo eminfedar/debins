@@ -27,7 +27,7 @@ private:
     }
 
     // If you use an another package system, just change the these two.
-    QString cmd_install = "pkexec /bin/sh -c \"dpkg --install '{DEBFILE}' && apt-get install -f -y\"";
+    QString cmd_install = "pkexec /bin/sh -c \"dpkg --install '{DEBFILE}';apt-get -y install -f\"";
     QString cmd_remove = "pkexec dpkg --purge {PACKAGE}";
 
     // Get the name of the package in the repository.

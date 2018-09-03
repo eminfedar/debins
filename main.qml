@@ -21,8 +21,8 @@ ApplicationWindow {
         }
 
         onInstallFinished: {
-            mainForm.popup.background.color = "#f0f0f0"
-            mainForm.popup.color = "#000"
+            mainForm.popup.background.color = "#007700"
+            mainForm.popup.color = "#fff"
             mainForm.popup.text = qsTr("Successfully Installed!")
             mainForm.popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
             packexists = true
@@ -35,8 +35,8 @@ ApplicationWindow {
 
         }
         onUninstallFinished: {
-            mainForm.popup.background.color = "#f0f0f0"
-            mainForm.popup.color = "#000"
+            mainForm.popup.background.color = "#007700"
+            mainForm.popup.color = "#fff"
             mainForm.popup.text = qsTr("Successfully Uninstalled!")
             mainForm.popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
             packexists = false

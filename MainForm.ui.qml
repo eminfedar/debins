@@ -154,6 +154,8 @@ Item {
     Connections {
         target: install_ma
         onClicked: {
+            popup.background.color = "#f0f0f0"
+            popup.color = "#000"
             popup.closePolicy = Popup.NoAutoClose
             popup.text = qsTr("Installing...")
             popup.open()
@@ -165,11 +167,12 @@ Item {
     Connections {
         target: uninstall_ma
         onClicked: {
+            popup.background.color = "#f0f0f0"
+            popup.color = "#000"
             popup.closePolicy = Popup.NoAutoClose
             popup.text = qsTr("Uninstalling...")
             popup.open()
             ddpkg.uninstall()
-
         }
     }
 
@@ -196,7 +199,7 @@ Item {
         y: parent.height / 2 - parent.height / 8
         modal: true
         property string text: ""
-        property string color: ""
+        property string color: "#000"
 
         background: Rectangle{
             color: "#f0f0f0"

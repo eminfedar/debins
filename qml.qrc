@@ -6,5 +6,6 @@
         <file>img/cancel.png</file>
         <file>img/debicon.png</file>
         <file>img/install.png</file>
+        <file>img/refresh.png</file>
     </qresource>
 </RCC>

@@ -1,8 +1,9 @@
 import QtQuick 2.4
 import QtGraphicalEffects 1.0
+import QtQuick.Controls 2.0
 
 Item {
-    id: item1
+    id: root
     width: 320
     height: 425
 
@@ -57,7 +58,6 @@ Item {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }
-
         }
 
         Rectangle {
@@ -102,6 +102,7 @@ Item {
 
         Rectangle {
             id: uninstall_rect
+            enabled: ddpkg.packageExists
             x: 173
             y: 253
             width: 120
@@ -141,7 +142,7 @@ Item {
                 }
             }
 
-            ColorOverlay{
+            ColorOverlay {
                 anchors.fill: uninstall
                 source: uninstall
                 visible: !parent.enabled
@@ -152,6 +153,60 @@ Item {
 
     Connections {
         target: install_ma
-        onClicked: ddpkg.install()
+        onClicked: {
+            popup.closePolicy = Popup.NoAutoClose
+            popup.text = qsTr("Installing...")
+            popup.open()
+            ddpkg.install()
+            popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        }
+    }
+
+    Connections {
+        target: uninstall_ma
+        onClicked: {
+            popup.closePolicy = Popup.NoAutoClose
+            popup.text = qsTr("Uninstalling...")
+            popup.open()
+            ddpkg.uninstall()
+
+        }
+    }
+
+    Connections{
+        target: ddpkg
+
+        onPackexistsChanged: {
+            console.log("Changed")
+            uninstall_rect.enabled = ddpkg.packexists
+            if(ddpkg.packexists){
+                install.source = "img/refresh.png"
+                install_txt.text = qsTr("Reinstall");
+            }else{
+                install.source = "img/install.png"
+                install_txt.text = qsTr("Install");
+            }
+        }
+    }
+
+
+    property var popup: Popup{
+        id: popup
+        width: parent.width
+        height: parent.height/4
+        y: parent.height / 2 - parent.height / 8
+        modal: true
+        property string text: ""
+        property string color: ""
+
+        background: Rectangle{
+            color: "#f0f0f0"
+        }
+
+        Text{
+            id: topic
+            text: popup.text
+            color: popup.color
+        }
     }
 }

@@ -10,5 +10,6 @@
         <file>img/downgrade.png</file>
         <file>img/reinstall.png</file>
         <file>img/uninstall.png</file>
+        <file>translations/debins_tr.qm</file>
     </qresource>
 </RCC>

@@ -247,6 +247,21 @@ public slots:
         process->deleteLater();
         return _oldVersion;
     }
+
+    QString getErrorMessage(int errorCode){
+        switch (errorCode) {
+        case 1:
+            return QObject::tr("We have some issues while installing the package.\nPlease run from terminal to see the errors.\n\nCommand: debins file.deb");
+        case 2:
+            return QObject::tr("We couldn't find the file.");
+        case 100:
+            return QObject::tr("A Program using the package manager (dpkg) now. Please stop it first.");
+        case 126:
+            return QObject::tr("Please enter your root password to make Debins install the package.");
+        default:
+            return QString::number(errorCode);
+        }
+    }
 };
 
 #endif // DDPKG_H

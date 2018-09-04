@@ -4,11 +4,32 @@
 #include <QFileInfo>
 #include <QtMath>
 #include <QIcon>
+#include <QTranslator>
 #include "ddpkg.h"
 
 QString DDpkg::debFileName = "";
 QString DDpkg::debFilePath = "";
 QString DDpkg::debFileSizeMB = "";
+
+bool ddpkgConfigs(QString filePath){
+    QFileInfo file(filePath);
+    if(!(file.exists() && file.isFile()))
+        return 0; // No file.
+
+    // Send infos to QML
+    DDpkg::debFileName = file.fileName();
+    DDpkg::debFilePath = file.absoluteFilePath();
+    QString fileSize = "";
+    if(file.size() / 1000.0 / 1000.0 < 1)
+        fileSize = QString::number((double)(floor(file.size() / 1000.0 * 10.0) / 10.0)) + " KB";
+    else if(file.size() / 1000.0 / 1000.0 / 1000.0 < 1)
+        fileSize = QString::number((double)(floor(file.size() / 1000.0 / 1000.0 * 10.0) / 10.0)) + " MB";
+    else
+        fileSize = QString::number((double)(floor(file.size() / 1000.0 / 1000.0 / 1000.0 * 10.0) / 10.0)) + "GB";
+    DDpkg::debFileSizeMB = fileSize;
+
+    return 1;
+}
 
 int main(int argc, char *argv[])
 {
@@ -27,22 +48,21 @@ int main(int argc, char *argv[])
         filePath = "/home/eminfedar/İndirilenler/bat_0.6.1_amd64.deb"; // TEST DEB FILE
 #endif
 
-    QFileInfo file(filePath);
-    if(!(file.exists() && file.isFile()))
-        return 0; // No file.
+    if(!ddpkgConfigs(filePath)) return 0;
 
-    // Send infos to QML
-    DDpkg::debFileName = file.fileName();
-    DDpkg::debFilePath = file.absoluteFilePath();
-    QString fileSize = "";
-    if(file.size() / 1000.0 / 1000.0 < 1)
-        fileSize = QString::number((double)(floor(file.size() / 1000.0 * 10.0) / 10.0)) + " KB";
-    else if(file.size() / 1000.0 / 1000.0 / 1000.0 < 1)
-        fileSize = QString::number((double)(floor(file.size() / 1000.0 / 1000.0 * 10.0) / 10.0)) + " MB";
-    else
-        fileSize = QString::number((double)(floor(file.size() / 1000.0 / 1000.0 / 1000.0 * 10.0) / 10.0)) + "GB";
-    DDpkg::debFileSizeMB = fileSize;
+    // CHECK IF TRANSLATION AVAILABLE
+    QTranslator translator;
+    QString lang = QLocale::system().name().left(2);
+    QString langStr = QLocale::system().languageToString(QLocale::system().language());
 
+    if(lang != "en"){
+        if(translator.load(":/translations/debins_" + lang)){
+            app.installTranslator(&translator);
+        }else{
+            qDebug() << "There is no available translations for your language.";
+            qDebug() << "You can translate this program to " << langStr << " VISIT ==> https://github.com/eminfedar/debins/";
+        }
+    }
 
     // Register DDpkg class for QML accessing.
     qmlRegisterType<DDpkg>("org.debins.ddpkg", 1, 0, "DDpkg");

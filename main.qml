@@ -46,7 +46,7 @@ ApplicationWindow {
         onInstallError: {
             mainForm.popup.background.color = "#AA0000"
             mainForm.popup.color = "#fff"
-            mainForm.popup.text = qsTr("Error: ") + errorCode
+            mainForm.popup.text = qsTr("Error: ") + ddpkg.getErrorMessage(errorCode)
             mainForm.popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
         }
@@ -65,7 +65,7 @@ ApplicationWindow {
         onUninstallError: {
             mainForm.popup.background.color = "#AA0000"
             mainForm.popup.color = "#fff"
-            mainForm.popup.text = qsTr("Error: ") + errorCode
+            mainForm.popup.text = qsTr("Error: ") + ddpkg.getErrorMessage(errorCode)
             mainForm.popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
         }
     }

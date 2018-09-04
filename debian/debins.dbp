@@ -1,19 +1,19 @@
 [DEBREATE-0.7.13]
 <<CTRL>>
 Package: debins
-Version: 0.1
+Version: 0.20
 Maintainer: Emin Fedar <eminfedar@gmail.com>
 Section: utils
 Architecture: amd64
 Priority: standard
-Depends: libqt5quick5, libqt5qml5, libqt5gui5, libqt5network5, libqt5core5a, libstdc++6, libgcc1, libc6, xdg-utils
+Depends: libqt5quick5, libqt5qml5, libqt5gui5, libqt5network5, libqt5core5a, libstdc++6, libgcc1, libc6
 Description: Simple One-Click deb package installer.
  Install .deb packages just by opening them with double-click!
 
 <</CTRL>>
 <<FILES>>
 1
-/home/eminfedar/Belgeler/Deb_Packaging/debins/debins.png -> debins.png -> /usr/share/icons/
+/home/eminfedar/Belgeler/Deb Packaging/debins/debins.png -> debins.png -> /usr/share/icons
 /home/eminfedar/Belgeler/QtProjects/debins/Release/debins* -> debins -> /usr/bin
 <</FILES>>
 <<SCRIPTS>>
@@ -21,7 +21,9 @@ Description: Simple One-Click deb package installer.
 0
 <</PREINST>>
 <<POSTINST>>
-0
+1
+configFilePath="/home/$(logname)/.config/mimeapps.list";
+sudo -u $(logname) cat $configFilePath | grep "debins.desktop" || echo "application/vnd.debian.binary-package=debins.desktop;" >> $configFilePath && echo "Added Debins to the mimeapps.list!";
 <</POSTINST>>
 <<PRERM>>
 0
@@ -32,6 +34,22 @@ Description: Simple One-Click deb package installer.
 <</SCRIPTS>>
 <<CHANGELOG>>
 <<DEST>>DEFAULT<</DEST>>
+debins (0.2) ; urgency=low
+
+  * [Added] Turkish Translation
+    [Added] Upgrade & Downgrade options
+    [Info] Now this package sets Debins as default application for .deb files.
+
+ -- Emin Fedar <eminfedar@gmail.com>  Tue, 04 Sep 2018 22:08:56 +0300
+
+
+debins (0.11) ; urgency=low
+
+  * [Fixed] Gives error when opened in space-has-folder (Like "New Folder")
+
+ -- Emin Fedar <eminfedar@gmail.com>  Mon, 03 Sep 2018 23:31:03 +0300
+
+
 debins (0.1) ; urgency=low
 
   * First version.
@@ -64,6 +82,7 @@ SOFTWARE.
 <</COPYRIGHT>>
 <<MENU>>
 1
+[FILENAME=debins]
 Name=Debins
 Version=1.0
 Exec=debins

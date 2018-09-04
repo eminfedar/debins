@@ -17,6 +17,15 @@ ApplicationWindow {
         property bool packexists: false
 
         Component.onCompleted: {
+            if(packageExists){
+                mainForm.newVersion = newVersion
+                mainForm.oldVersion = oldVersion
+                if(newVersion || oldVersion){
+                    mainForm.currentVersion = packageCurrentVersion + " -> " + packageVersion;
+                }else{
+                    mainForm.currentVersion = "";
+                }
+            }
             packexists = packageExists
         }
 
@@ -25,7 +34,14 @@ ApplicationWindow {
             mainForm.popup.color = "#fff"
             mainForm.popup.text = qsTr("Successfully Installed!")
             mainForm.popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+            mainForm.newVersion = false;
+            mainForm.oldVersion = false;
+            mainForm.install.source = "img/reinstall.png"
+            mainForm.install_txt.text = qsTr("Reinstall")
             packexists = true
+
+            mainForm.currentVersion = ""
         }
         onInstallError: {
             mainForm.popup.background.color = "#AA0000"
@@ -39,7 +55,12 @@ ApplicationWindow {
             mainForm.popup.color = "#fff"
             mainForm.popup.text = qsTr("Successfully Uninstalled!")
             mainForm.popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+            mainForm.newVersion = false;
+            mainForm.oldVersion = false;
             packexists = false
+
+            mainForm.currentVersion = ""
         }
         onUninstallError: {
             mainForm.popup.background.color = "#AA0000"

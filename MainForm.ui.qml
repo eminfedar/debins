@@ -7,6 +7,12 @@ Item {
     width: 320
     height: 425
 
+    property string currentVersion: ""
+    property bool newVersion: false
+    property bool oldVersion: false
+    property var install: install
+    property var install_txt: install_txt
+
     Rectangle {
         id: base
         x: 0
@@ -20,7 +26,7 @@ Item {
         Image {
             id: debicon
             x: 85
-            y: 22
+            y: 25
             width: 150
             height: 150
             anchors.horizontalCenterOffset: 0
@@ -30,9 +36,9 @@ Item {
             Text {
                 id: fileinfo
                 x: 55
-                y: 183
+                y: 184
                 color: "#2d2d2d"
-                text: ddpkg.fileSize
+                text: ddpkg.fileSize + " | " + ddpkg.packageVersion
                 style: Text.Raised
                 verticalAlignment: Text.AlignVCenter
                 font.bold: false
@@ -46,7 +52,7 @@ Item {
             Text {
                 id: filename
                 x: 12
-                y: 159
+                y: 161
                 color: "#2d2d2d"
                 text: ddpkg.fileName
                 anchors.horizontalCenterOffset: 0
@@ -81,7 +87,7 @@ Item {
             Image {
                 id: install
                 x: 15
-                y: 13
+                y: 8
                 width: 90
                 height: 90
                 source: "img/install.png"
@@ -96,6 +102,19 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 16
+                }
+
+                Text {
+                    id: install_ver
+                    x: 46
+                    y: 114
+                    color: "#2d2d2d"
+                    text: currentVersion
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 13
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.horizontalCenterOffset: 0
+                    verticalAlignment: Text.AlignVCenter
                 }
             }
         }
@@ -123,10 +142,10 @@ Item {
             Image {
                 id: uninstall
                 x: 15
-                y: 13
+                y: 8
                 width: 90
                 height: 90
-                source: "img/cancel.png"
+                source: "img/uninstall.png"
 
                 Text {
                     id: uninstall_txt
@@ -147,7 +166,22 @@ Item {
                 source: uninstall
                 visible: !parent.enabled
                 color: "#bbbbbb"
+                anchors.rightMargin: 0
+                anchors.bottomMargin: 0
+                anchors.leftMargin: 0
+                anchors.topMargin: 0
             }
+        }
+
+        Rectangle {
+            id: rectangle
+            x: 27
+            y: 239
+            width: 270
+            height: 1
+            color: "#cccccc"
+            anchors.horizontalCenter: parent.horizontalCenter
+            border.width: 0
         }
     }
 
@@ -175,17 +209,25 @@ Item {
         }
     }
 
-    Connections{
+    Connections {
         target: ddpkg
 
         onPackexistsChanged: {
             uninstall_rect.enabled = ddpkg.packexists
-            if(ddpkg.packexists){
-                install.source = "img/refresh.png"
-                install_txt.text = qsTr("Reinstall");
-            }else{
+            if (ddpkg.packexists) {
+                if (newVersion) {
+                    install.source = "img/upgrade.png"
+                    install_txt.text = qsTr("Upgrade")
+                } else if(oldVersion){
+                    install.source = "img/downgrade.png"
+                    install_txt.text = qsTr("Downgrade")
+                } else {
+                    install.source = "img/reinstall.png"
+                    install_txt.text = qsTr("Reinstall")
+                }
+            } else {
                 install.source = "img/install.png"
-                install_txt.text = qsTr("Install");
+                install_txt.text = qsTr("Install")
             }
         }
     }

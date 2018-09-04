@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
         fileSize = QString::number((double)(floor(file.size() / 1000.0 / 1000.0 / 1000.0 * 10.0) / 10.0)) + "GB";
     DDpkg::debFileSizeMB = fileSize;
 
+
     // Register DDpkg class for QML accessing.
     qmlRegisterType<DDpkg>("org.debins.ddpkg", 1, 0, "DDpkg");
 

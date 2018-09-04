@@ -3,10 +3,12 @@
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>MainForm.ui.qml</file>
-        <file>img/cancel.png</file>
         <file>img/debicon.png</file>
         <file>img/install.png</file>
-        <file>img/refresh.png</file>
         <file>img/icon.png</file>
+        <file>img/upgrade.png</file>
+        <file>img/downgrade.png</file>
+        <file>img/reinstall.png</file>
+        <file>img/uninstall.png</file>
     </qresource>
 </RCC>

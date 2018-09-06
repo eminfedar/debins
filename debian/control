@@ -1,5 +1,5 @@
 Package: debins
-Version: 0.20
+Version: 0.30
 Maintainer: Emin Fedar <eminfedar@gmail.com>
 Section: utils
 Architecture: amd64

@@ -1,7 +1,7 @@
 [DEBREATE-0.7.13]
 <<CTRL>>
 Package: debins
-Version: 0.20
+Version: 0.3
 Maintainer: Emin Fedar <eminfedar@gmail.com>
 Section: utils
 Architecture: amd64
@@ -13,8 +13,8 @@ Description: Simple One-Click deb package installer.
 <</CTRL>>
 <<FILES>>
 1
-/home/eminfedar/Belgeler/Deb Packaging/debins/debins.png -> debins.png -> /usr/share/icons
 /home/eminfedar/Belgeler/QtProjects/debins/Release/debins* -> debins -> /usr/bin
+/home/eminfedar/Belgeler/Deb Packaging/debins/debins.png -> debins.png -> /usr/share/icons
 <</FILES>>
 <<SCRIPTS>>
 <<PREINST>>
@@ -34,6 +34,15 @@ sudo -u $(logname) cat $configFilePath | grep "debins.desktop" || echo "applicat
 <</SCRIPTS>>
 <<CHANGELOG>>
 <<DEST>>DEFAULT<</DEST>>
+debins (0.3) ; urgency=low
+
+  * [Added] Installed icon
+    [Added] Terminal output show button (top-right)
+    [Fixed] Little version showing bugs.
+
+ -- Emin Fedar <eminfedar@gmail.com>  Fri, 07 Sep 2018 00:45:32 +0300
+
+
 debins (0.2) ; urgency=low
 
   * [Added] Turkish Translation

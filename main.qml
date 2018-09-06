@@ -62,7 +62,9 @@ ApplicationWindow {
             packexists = true
 
             mainForm.currentVersion = ""
+            ddpkg.getPackageCurrentVersion()
         }
+
         onInstallError: {
             mainForm.popup.background.color = "#AA0000"
             mainForm.popup.color = "#fff"

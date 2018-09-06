@@ -80,6 +80,7 @@ Item {
                         hoverEnabled: true
 
                         ToolTip{
+                            id: installed_tt
                             text: ddpkg.packageName + " " + ddpkg.packageCurrentVersion + qsTr(" is installed.")
                             background: Rectangle{
                                 color: "#f5f5f5"
@@ -87,6 +88,13 @@ Item {
                                 border.color: "#999"
                             }
                             visible: installed_ma.containsMouse
+                        }
+
+                        Connections{
+                            target: ddpkg
+                            onPackageCurrentVersionChanged: {
+                                installed_tt.text = ddpkg.packageName + " " + ddpkg.packageCurrentVersion + qsTr(" is installed.")
+                            }
                         }
                     }
                 }

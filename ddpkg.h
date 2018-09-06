@@ -37,7 +37,7 @@ private:
     QString packageVersion() {
         return _packageVersion;
     }
-    QString packageCurrentVersion() {
+    QString packageCurrentVersion() const{
         return _packageCurrentVersion;
     }
     bool newVersion(){
@@ -206,6 +206,7 @@ public slots:
         }
 
         process->deleteLater();
+        emit packageCurrentVersionChanged();
         return _packageCurrentVersion;
     }
 

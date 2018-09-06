@@ -4,14 +4,17 @@ import QtQuick.Controls 2.0
 
 Item {
     id: root
-    width: 320
-    height: 425
+    anchors.fill: parent
+    property alias installed: installed
 
     property string currentVersion: ""
     property bool newVersion: false
     property bool oldVersion: false
     property var install: install
     property var install_txt: install_txt
+    property var terminal_ma : terminal_ma
+    property var terminal_fl: terminal_fl
+    property var terminal_btn_co: terminal_btn_co
 
     Rectangle {
         id: base
@@ -63,6 +66,20 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
+
+                Image {
+                    id: installed
+                    y: 2
+                    x: parent.contentWidth + 4
+                    visible: ddpkg.packexists
+                    source: "img/installed.png"
+
+                    MouseArea{
+                        id: installed_ma
+                        anchors.fill: parent
+                        hoverEnabled: true
+                    }
+                }
             }
         }
 
@@ -82,6 +99,7 @@ Item {
                 cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent
                 hoverEnabled: true
+
             }
 
             Image {
@@ -108,8 +126,10 @@ Item {
                     id: install_ver
                     x: 46
                     y: 114
+                    width: parent.width+8
                     color: "#2d2d2d"
                     text: currentVersion
+                    wrapMode: Text.Wrap
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.pixelSize: 13
                     horizontalAlignment: Text.AlignHCenter
@@ -174,7 +194,7 @@ Item {
         }
 
         Rectangle {
-            id: rectangle
+            id: split_rect
             x: 27
             y: 239
             width: 270
@@ -182,17 +202,74 @@ Item {
             color: "#cccccc"
             anchors.horizontalCenter: parent.horizontalCenter
             border.width: 0
+
+
         }
+    }
+    Flickable{
+        id: terminal_fl
+        anchors.fill: parent
+        flickableDirection: Flickable.VerticalFlick
+        enabled: false
+        visible: enabled
+
+        property var terminal_ta: TextArea {
+            id: terminal_ta
+            anchors.fill: parent
+            text: ">_\n"
+            font.pointSize: 10
+            background: Rectangle{
+                color: "#222"
+            }
+            color: "#fff"
+            visible: terminal_fl.enabled
+            readOnly: true
+            wrapMode: TextEdit.WordWrap
+
+        }
+
+        TextArea.flickable: terminal_ta
+
+        ScrollBar.vertical: ScrollBar{}
+
+    }
+
+    Image {
+        id: terminal_btn
+        x: parent.width - 16 - 8
+        y: 8
+        source: "img/downarrow.png"
+        opacity: terminal_ma.pressed ? 0.8 : 1
+
+        MouseArea {
+            id: terminal_ma
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+        }
+    }
+
+    ColorOverlay {
+        id: terminal_btn_co
+        anchors.fill: terminal_btn
+        source: terminal_btn
+        visible: false
+        color: "#009900"
+        anchors.rightMargin: 0
+        anchors.bottomMargin: 0
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
     }
 
     Connections {
         target: install_ma
         onClicked: {
+            popup.closePolicy = Popup.NoAutoClose
             popup.background.color = "#f0f0f0"
             popup.color = "#000"
-            popup.closePolicy = Popup.NoAutoClose
-            popup.text = qsTr("Installing...")
+            popup.text = qsTr("Installing...") + "\n"
             popup.open()
+            terminal_btn_co.visible = true
+            terminal_fl.terminal_ta.text = "";
             ddpkg.install()
         }
     }
@@ -200,12 +277,15 @@ Item {
     Connections {
         target: uninstall_ma
         onClicked: {
+            popup.closePolicy = Popup.NoAutoClose
             popup.background.color = "#f0f0f0"
             popup.color = "#000"
-            popup.closePolicy = Popup.NoAutoClose
-            popup.text = qsTr("Uninstalling...")
+            popup.text = qsTr("Uninstalling...") + "\n"
             popup.open()
+            terminal_btn_co.visible = true
+            terminal_fl.terminal_ta.text = "";
             ddpkg.uninstall()
+
         }
     }
 
@@ -236,7 +316,7 @@ Item {
     property var popup: Popup{
         id: popup
         width: parent.width
-        height: parent.height/4
+        height: parent.height/3
         y: parent.height / 2 - parent.height / 8
         modal: true
         property string text: ""
@@ -246,10 +326,14 @@ Item {
             color: "#f0f0f0"
         }
 
+        property int lineCount: topic.lineCount
         Text{
             id: topic
             text: popup.text
             color: popup.color
+            wrapMode: Text.Wrap
+            anchors.fill: parent
         }
     }
+
 }

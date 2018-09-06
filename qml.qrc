@@ -11,5 +11,7 @@
         <file>img/reinstall.png</file>
         <file>img/uninstall.png</file>
         <file>translations/debins_tr.qm</file>
+        <file>img/installed.png</file>
+        <file>img/downarrow.png</file>
     </qresource>
 </RCC>

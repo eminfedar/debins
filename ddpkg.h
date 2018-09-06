@@ -18,6 +18,7 @@ class DDpkg : public QObject
     Q_PROPERTY(bool oldVersion READ oldVersion NOTIFY oldVersionChanged)
     Q_PROPERTY(QString packageCurrentVersion READ packageCurrentVersion NOTIFY packageCurrentVersionChanged)
     Q_PROPERTY(bool packageExists READ packageExists NOTIFY packageExistsChanged)
+    Q_PROPERTY(QString output READ output NOTIFY outputChanged)
 
 private:
     // for QML. File Infos.
@@ -45,6 +46,9 @@ private:
     bool oldVersion(){
         return _oldVersion;
     }
+    QString output() const{
+        return _output;
+    }
 
     bool _packageExists = false;
     QString _packageName = "";
@@ -52,6 +56,7 @@ private:
     QString _packageCurrentVersion = "";
     bool _newVersion = false;
     bool _oldVersion = false;
+    QString _output = "";
 
     // If you use an another package system, just change the these two.
     QString cmd_install = "pkexec /bin/sh -c \"dpkg --install '{DEBFILE}';apt-get -y install -f\"";
@@ -77,6 +82,7 @@ signals:
     void packageCurrentVersionChanged();
     void newVersionChanged();
     void oldVersionChanged();
+    void outputChanged();
 
     void installFinished();
     void installError(int errorCode);
@@ -119,7 +125,9 @@ public slots:
 
         process->connect(process, &QProcess::readyReadStandardOutput, [=](){
             QString processStdOut(process->readAllStandardOutput());
-            qDebug() << "OUT: " << processStdOut;
+            qDebug() << "OUTi: " << processStdOut;
+            _output = processStdOut;
+            emit outputChanged();
         });
         process->connect(process, static_cast<void (QProcess::*)(int)>(&QProcess::finished), [=](int exitCode){
             if(exitCode == 0)
@@ -138,7 +146,9 @@ public slots:
         process->setProcessChannelMode(QProcess::MergedChannels);
         process->connect(process, &QProcess::readyReadStandardOutput, [=]{
             QString processStdOut = process->readAllStandardOutput();
-            qDebug() << "OUT: " << processStdOut;
+            qDebug() << "OUTu: " << processStdOut;
+            _output = processStdOut;
+            emit outputChanged();
         });
         process->connect(process, static_cast<void (QProcess::*)(int)>(&QProcess::finished), [=](int exitCode){
             if(exitCode == 0)
@@ -176,7 +186,7 @@ public slots:
 
         QString processStdOut = (process->readAllStandardOutput());
         if(processStdOut.split(": ")[0] == " Version"){
-            _packageVersion = (QString)(processStdOut.split(": ")[1]).replace('\n',"").left(7);
+            _packageVersion = (QString)(processStdOut.split(": ")[1]).replace('\n',"");
         }
 
         process->deleteLater();
@@ -192,7 +202,7 @@ public slots:
 
         QString processStdOut = (process->readAllStandardOutput());
         if(processStdOut.split(": ")[0] == "Version"){
-            _packageCurrentVersion = (QString)(processStdOut.split(": ")[1]).replace('\n',"").left(7);
+            _packageCurrentVersion = (QString)(processStdOut.split(": ")[1]).replace('\n',"");
         }
 
         process->deleteLater();
@@ -257,7 +267,7 @@ public slots:
         case 100:
             return QObject::tr("A Program using the package manager (dpkg) now. Please stop it first.");
         case 126:
-            return QObject::tr("Please enter your root password to make Debins install the package.");
+            return QObject::tr("Please enter your root password to make Debins access the dpkg.");
         default:
             return QString::number(errorCode);
         }

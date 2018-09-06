@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.0
 import org.debins.ddpkg 1.0
 
 ApplicationWindow {
+    id: app
     visible: true
     width: 320
     height: 425
@@ -12,6 +13,22 @@ ApplicationWindow {
     MainForm{
         id: mainForm
     }
+
+    Connections{
+        target: mainForm.terminal_ma
+        onClicked: {
+            if(!mainForm.terminal_fl.enabled){
+                app.setWidth(620)
+                app.setHeight(350)
+                mainForm.terminal_fl.enabled = true
+            }else{
+                app.setWidth(320)
+                app.setHeight(425)
+                mainForm.terminal_fl.enabled = false
+            }
+        }
+    }
+
     DDpkg{
         id: ddpkg
         property bool packexists: false
@@ -21,7 +38,7 @@ ApplicationWindow {
                 mainForm.newVersion = newVersion
                 mainForm.oldVersion = oldVersion
                 if(newVersion || oldVersion){
-                    mainForm.currentVersion = packageCurrentVersion + " -> " + packageVersion;
+                    mainForm.currentVersion = packageCurrentVersion.substring(0, 8) + " -> " + packageVersion.substring(0, 8);
                 }else{
                     mainForm.currentVersion = "";
                 }
@@ -37,8 +54,11 @@ ApplicationWindow {
 
             mainForm.newVersion = false;
             mainForm.oldVersion = false;
+
             mainForm.install.source = "img/reinstall.png"
             mainForm.install_txt.text = qsTr("Reinstall")
+
+            mainForm.terminal_btn_co.visible = false;
             packexists = true
 
             mainForm.currentVersion = ""
@@ -49,6 +69,7 @@ ApplicationWindow {
             mainForm.popup.text = qsTr("Error: ") + ddpkg.getErrorMessage(errorCode)
             mainForm.popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
+            mainForm.terminal_btn_co.color = "#990000";
         }
         onUninstallFinished: {
             mainForm.popup.background.color = "#007700"
@@ -58,6 +79,7 @@ ApplicationWindow {
 
             mainForm.newVersion = false;
             mainForm.oldVersion = false;
+            mainForm.terminal_btn_co.visible = false;
             packexists = false
 
             mainForm.currentVersion = ""
@@ -67,6 +89,13 @@ ApplicationWindow {
             mainForm.popup.color = "#fff"
             mainForm.popup.text = qsTr("Error: ") + ddpkg.getErrorMessage(errorCode)
             mainForm.popup.closePolicy = Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+            mainForm.terminal_btn_co.color = "#990000";
+        }
+
+        onOutputChanged: {
+            mainForm.terminal_fl.terminal_ta.append(output.replace("\n",""))
+            mainForm.popup.text = output
         }
     }
 }

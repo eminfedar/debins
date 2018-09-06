@@ -78,6 +78,16 @@ Item {
                         id: installed_ma
                         anchors.fill: parent
                         hoverEnabled: true
+
+                        ToolTip{
+                            text: ddpkg.packageName + " " + ddpkg.packageCurrentVersion + qsTr(" is installed.")
+                            background: Rectangle{
+                                color: "#f5f5f5"
+                                border.width: 1
+                                border.color: "#999"
+                            }
+                            visible: installed_ma.containsMouse
+                        }
                     }
                 }
             }

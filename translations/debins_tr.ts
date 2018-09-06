@@ -7,7 +7,7 @@
         <location filename="../MainForm.ui.qml" line="84"/>
         <location filename="../MainForm.ui.qml" line="96"/>
         <source> is installed.</source>
-        <translation> yüklü.</translation>
+        <translation> kurulu.</translation>
     </message>
     <message>
         <location filename="../MainForm.ui.qml" line="135"/>
